@@ -1,0 +1,14 @@
+---
+title: "Instalando paquetes"
+author: "Tomasmestreo"
+date: "2022-07-01"
+output: html_document
+---
+```{r}
+install.packages("sf")
+```
+Ahora voy a descargar la base de datos de flujo vehicular de la CABA
+```{r}
+Flujo_Vehicular = read.csv("https://cdn.buenosaires.gob.ar/datosabiertos/datasets/transporte-y-obras-publicas/flujo-vehicular-anillo-digital/dataset_flujo_vehicular.csv")
+```
+
