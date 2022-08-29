@@ -49,7 +49,7 @@ FVdmah = mutate (Flujo_Vehicular,
               
 ```
 
-Ya con la separación propuesta vamos a filtar para poder ver solamente los datos correspondientes a flujos internos, egresos e ingresos por cada codigo de locación para los datos post pandemia 2022
+Ya con la separación propuesta vamos a filtar para poder ver solamente los datos correspondientes a flujos internos, egresos e ingresos por cada código de locación para los datos post pandemia 2021 y 2022
 
 ```{r}
 Marzo21 = FVdmah %>% 
@@ -57,4 +57,44 @@ Marzo21 = FVdmah %>%
   group_by(CODIGO_LOCACION,SENTIDO) %>% 
 summarise(CANTIDAD = sum(CANTIDAD))
 ```
+
+```{r}
+Marzo22 = FVdmah %>% 
+ filter(MES == "MAR",ANO ==2022) %>% 
+  group_by(CODIGO_LOCACION,SENTIDO) %>% 
+summarise(CANTIDAD = sum(CANTIDAD))
+```
+```{r}
+Martes0322 = FVdmah %>% 
+ filter( DIA == "08" , MES == "MAR",ANO ==2022) %>% 
+  group_by(CODIGO_LOCACION,SENTIDO) %>% 
+summarise(CANTIDAD = sum(CANTIDAD))
+```
+
+```{r}
+Martes0321 = FVdmah %>% 
+ filter( DIA == "09" , MES == "MAR",ANO ==2021) %>% 
+  group_by(CODIGO_LOCACION,SENTIDO) %>% 
+summarise(CANTIDAD = sum(CANTIDAD))
+```
+En esta ocasión vamos a comparar los 2do Martes de los dos años seleccionados con el objetivo de ver si el flujo varió de manera considerable
+
+```{r}
+Comparativa = left_join(Martes0321,Martes0322,("CODIGO_LOCACION"))
+```
+
+```{r}
+Comparativa = Comparativa %>% 
+  mutate(Porcentaje = (((CANTIDAD.y/CANTIDAD.x)-1)*100)) %>% 
+  filter( SENTIDO.x== SENTIDO.y)  %>% 
+  rename("2021"="CANTIDAD.x", "2022"="CANTIDAD.y")
+```
+
+Ahora si, para quedarnos solo con los datos deseados los seleccionaremos con la función correspondiente
+
+```{r}
+ComparativaFinal = Comparativa %>% 
+  select(CODIGO_LOCACION,"2021",SENTIDO.x, Porcentaje)
+```
+
 
