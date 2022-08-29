@@ -38,11 +38,23 @@ ggplot() +
             aes(x = LONGITUD,
                 y = LATITUD))
 ```
+Vamos a manipular los datos ya que el campo HORA nos incluye datos que hacen referencia a la fecha.
+                             
 ```{r}
-Marzo = Flujo_Vehicular %>% 
-  group_by(CODIGO_LOCACION) %>% 
-  group_by(SENTIDO = SENTIDO)
-  summarise(CANTIDAD = sum(CANTIDAD))
+FVdmah = mutate (Flujo_Vehicular,
+              DIA = substr(HORA,1,2),
+            MES = substr(HORA,3,5),
+            ANO = substr(HORA,6,9),
+              HORA = substr(HORA, 11,12))
+              
+```
 
+Ya con la separación propuesta vamos a filtar para poder ver solamente los datos correspondientes a flujos internos, egresos e ingresos por cada codigo de locación para los datos post pandemia 2022
+
+```{r}
+Marzo21 = FVdmah %>% 
+ filter(MES == "MAR",ANO ==2021) %>% 
+  group_by(CODIGO_LOCACION,SENTIDO) %>% 
+summarise(CANTIDAD = sum(CANTIDAD))
 ```
 
