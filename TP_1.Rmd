@@ -11,4 +11,38 @@ Ahora voy a descargar la base de datos de flujo vehicular de la CABA
 ```{r}
 Flujo_Vehicular = read.csv("https://cdn.buenosaires.gob.ar/datosabiertos/datasets/transporte-y-obras-publicas/flujo-vehicular-anillo-digital/dataset_flujo_vehicular.csv")
 ```
+Ahora buscamos el mapa de CABA para mapear los puntos de peaje
+
+```{r}
+library("sf")
+library("tidyverse")
+```
+
+```{r}
+Caba <- st_read("https://bitsandbricks.github.io/data/CABA_rc.geojson")
+```
+```{r}
+CabaB = Caba %>% 
+  group_by(BARRIO) %>% 
+  summarise(POBLACION = sum(POBLACION),
+              VIVIENDAS = sum(VIVIENDAS),
+              HOGARES = sum(HOGARES),
+              HOGARES_NBI = sum(HOGARES_NBI),
+              AREA_KM2 = sum(AREA_KM2))
+```
+
+```{r}
+ggplot() + 
+    geom_sf(data = CabaB)+ 
+  geom_point(data = Flujo_Vehicular,
+            aes(x = LONGITUD,
+                y = LATITUD))
+```
+```{r}
+Marzo = Flujo_Vehicular %>% 
+  group_by(CODIGO_LOCACION) %>% 
+  group_by(SENTIDO = SENTIDO)
+  summarise(CANTIDAD = sum(CANTIDAD))
+
+```
 
