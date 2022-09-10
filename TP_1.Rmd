@@ -4,6 +4,17 @@ author: "Tomasmestreo"
 date: "2022-07-01"
 output: html_document
 ---
+
+```{r}
+library(usethis)
+```
+
+```{r}
+use_git_config(user.name = "tomasmestreo", user.email = "mestreolmedotomas@gmail.com")
+
+```
+
+
 ```{r}
 install.packages("sf")
 ```
